@@ -1,23 +1,14 @@
-extends Node2D
+class_name AOC
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
+func calculate() -> Array:
 	#var content = load_from_file('res://01/01-example.txt')
 	var content = load_from_file('res://01/01-input.txt')
 	
 	var lines = split_content(content)
 	var arrays = parse_lines(lines)	
-	var sum: int = calc_sum(arrays['first'], arrays['second'])
+	var sum = calc_sum(arrays['first'], arrays['second'])
 	
-	print(sum)
-	
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+	return [sum, arrays]
 
 
 func load_from_file(path: String) -> String:
