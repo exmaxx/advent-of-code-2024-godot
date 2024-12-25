@@ -6,10 +6,18 @@
 script = ExtResource("1_exxeh")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-62, -426)
+position = Vector2(-48, -113)
 anchor_mode = 0
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
+
+[node name="Label" type="Label" parent="."]
+offset_left = 695.0
+offset_top = 121.0
+offset_right = 786.0
+offset_bottom = 155.0
+theme_override_font_sizes/font_size = 40
+text = "I am here!"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

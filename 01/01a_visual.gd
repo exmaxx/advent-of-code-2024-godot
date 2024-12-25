@@ -1,47 +1,51 @@
 extends Node2D
 
 var DEFAULT_FONT = ThemeDB.fallback_font
-var DEFAULT_FONT_SIZE = ThemeDB.fallback_font_size
-var WAIT_TIME = 0.1
+#var DEFAULT_FONT_SIZE = ThemeDB.fallback_font_size
+var WAIT_TIME = 0.2
 var SCROLL_TIME = 0.05
-var SCROLL_Y = 35.8 / SCROLL_TIME
+var BASE_SIZE = 40
 
 var arrays: Dictionary
 var is_scrolling = false
+var target_y: int
 
 func _ready():
 	var aoc = AOC.new()
 	var result = aoc.calculate()
 	
-	arrays = result[1]
+	arrays = result['arrays']
 		
-	start_wait_timer()
-
-
+	var tween = get_tree().create_tween()
+	tween.set_loops().tween_callback(move_camera).set_delay(WAIT_TIME)
+	
+	
+func move_camera():
+	var y_lower = $Camera2D.position.y + BASE_SIZE
+	var tween = get_tree().create_tween()
+	tween.tween_property($Camera2D, "position:y", y_lower, SCROLL_TIME)
+	
+	
 func _process(delta):
-	if is_scrolling:
-		$Camera2D.position.y += SCROLL_Y * delta
+	pass
 
 
 func _draw():
+	print('draw')
 	for i in range(0, arrays.first.size()):
-		var y = 40 * i
+		var y = BASE_SIZE * i
 		
-		draw_string(DEFAULT_FONT, Vector2(0, y), str(arrays.first[i]), HORIZONTAL_ALIGNMENT_LEFT, -1, 40)
-		draw_string(DEFAULT_FONT, Vector2(200, y), str(arrays.second[i]), HORIZONTAL_ALIGNMENT_LEFT, -1, 40)
+		draw_col_num(arrays.first[i], Vector2(0, y))
+		draw_col_num(arrays.second[i], Vector2(200, y))
 		
 		var diff = abs(arrays.first[i] - arrays.second[i])
-		draw_string(DEFAULT_FONT, Vector2(400, y), '→ ' + str(diff), HORIZONTAL_ALIGNMENT_LEFT, -1, 40, Color.AQUA)
+		draw_col_str( '→ ' + str(diff), Vector2(400, y), Color.AQUA)
+		
+		
+func draw_col_str(str, vector, color = Color.WHITE):
+	draw_string(DEFAULT_FONT, vector, str, HORIZONTAL_ALIGNMENT_LEFT, -1, BASE_SIZE, color)
 
 
-func start_wait_timer():
-	is_scrolling = false
-	var timeout = get_tree().create_timer(WAIT_TIME).timeout
-	timeout.connect(start_scroll_timer)
-
-
-func start_scroll_timer():
-	is_scrolling = true
+func draw_col_num(number, vector, color = Color.WHITE):
+	draw_col_str(str(number), vector, color)
 	
-	var timeout = get_tree().create_timer(SCROLL_TIME).timeout
-	timeout.connect(start_wait_timer)

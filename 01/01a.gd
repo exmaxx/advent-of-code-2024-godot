@@ -1,6 +1,6 @@
 class_name AOC
 
-func calculate() -> Array:
+func calculate() -> Dictionary:
 	#var content = load_from_file('res://01/01-example.txt')
 	var content = load_from_file('res://01/01-input.txt')
 	
@@ -8,7 +8,10 @@ func calculate() -> Array:
 	var arrays = parse_lines(lines)	
 	var sum = calc_sum(arrays['first'], arrays['second'])
 	
-	return [sum, arrays]
+	return {
+		'sum': sum, 
+		'arrays': arrays
+	}
 
 
 func load_from_file(path: String) -> String:
